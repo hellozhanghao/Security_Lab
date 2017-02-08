@@ -168,7 +168,8 @@ if __name__ == "__main__":
             ans += '***********'+char
     print(ans)
 
-    # for params tuning
+    # # for params tuning
+
     # for char1 in range(len(cipher_fixed)):
     #     for char2 in range(len(cipher_order)):
     #         if cipher_fixed[char1] == cipher_order[char2]:
@@ -190,7 +191,6 @@ if __name__ == "__main__":
     # pp.pprint(cipher_order)
 
     conn.close()
-    print(map['/'])
 
 
 
