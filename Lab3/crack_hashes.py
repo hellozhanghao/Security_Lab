@@ -3,8 +3,10 @@ import hashlib
 hashlist = set()
 
 fin = open("hashes.txt",  newline='\n')
+fout = open("result.csv", 'w')
 
 new = fin.readline()
+ans = ''
 
 while new != "":
     new_split = new.split('. ')
@@ -17,6 +19,11 @@ while new != "":
         else:
             hash_value = new_split[1][:-2].split(" ")[0]
             word = new_split[1][33:-2]
+            ans += hash_value
+            ans += ','
+            ans += word
+            ans += '\n'
+
             if hashlib.md5(word.encode('ascii')).hexdigest() != hash_value:
                 print("Wrong hash: ", hash_value, word)
             # else:
@@ -26,6 +33,8 @@ while new != "":
     new = fin.readline()
 
 fin.close()
+fout.write(ans)
+fout.close()
 
 
 # save unsolved hashes:
@@ -42,7 +51,11 @@ fout.close()
 
 
 print("Number of unsoved hashes: ", len(hashlist))
-#
+
+
+
+# for brute force
+
 # # fin = open("/Users/zhanghao/Downloads/hashesorg251015.txt", 'rb')
 # alphabet = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 # # alphabet = "0123456789"
@@ -64,18 +77,8 @@ print("Number of unsoved hashes: ", len(hashlist))
 #
 
 
-# print("alphabut 7")
-# append(7, '')
-# print("alphabut 8")
-# append(8, '')
-# print("alphabut 9")
-# append(9, '')
-#
-#
 
-
-
-
+# for using dictionary
 
 # fin = open("/Users/zhanghao/Movies/DCHTPassv1.0.txt")
 
@@ -89,29 +92,52 @@ print("Number of unsoved hashes: ", len(hashlist))
 
 # https://hashkiller.co.uk/md5-decrypter.aspx
 
-
-
 # fin = open("/Users/zhanghao/Downloads/HyperionOnHackForumsNetRELEASE.txt")
-
 
 # fin = open("/Users/zhanghao/Downloads/passwords_collection.txt")
 
-fin = open("/Users/zhanghao/Downloads/Wordlist_82_million.txt")
-print("Wordlist_82_million")
+# fin = open("/Users/zhanghao/Downloads/Wordlist_82_million.txt")
+
+# fin = open("/Users/zhanghao/Downloads/crackstation-human-only.txt", 'rb')
+
+# fin = open("/Users/zhanghao/Downloads/hashesorg251015.txt", 'rb')
+
+# fin = open("/Users/zhanghao/Downloads/passwords_collection.txt", 'rb')
+
+fin = open("/Users/zhanghao/Downloads/crackstation.txt", 'rb')
 
 
 
+# read binary
 
 word = fin.readline()
 
+while word != '':
 
-while word != "":
-    # count += 1
+    word = word[:-1]
 
-    # if count % 1000000 == 0:
-    #     print(count)
-
-    if hashlib.md5(word[:-1].encode('utf-8')).hexdigest() in hashlist:
-        print(word[:-1], hashlib.md5(word.encode('utf-8')).hexdigest() )
+    if hashlib.md5(word).hexdigest() in hashlist:
+        print(hashlib.md5(word).hexdigest(), word)
 
     word = fin.readline()
+
+
+
+
+# utf -8
+
+# word = fin.readline()
+#
+#
+#
+# while word != "":
+#     print(word)
+#     # count += 1
+#
+#     # if count % 1000000 == 0:
+#     #     print(count)
+#
+#     if hashlib.md5(word[:-1].encode('utf-8')).hexdigest() in hashlist:
+#         print(word[:-1], hashlib.md5(word.encode('utf-8')).hexdigest() )
+#
+#     word = fin.readline()
