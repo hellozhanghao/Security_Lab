@@ -1,0 +1,129 @@
+Salting:
+
+Without salting
+
+
+Table generation:
+chain lenth = 3800
+chain number = 600000
+Time used to generate: 265 seconds
+
+Cracking:
+statistics
+-------------------------------------------------------
+plaintext found:                              15 of 15
+total time:                                   39.20 s
+  time of chain traverse:                     27.95 s
+  time of alarm check:                        10.75 s
+  time of wait:                               0.00 s
+  time of other operation:                    0.50 s
+time of disk read:                            0.16 s
+hash & reduce calculation of chain traverse:  108243000
+hash & reduce calculation of alarm check:     41757202
+number of alarm:                              144096
+speed of chain traverse:                      3.87 million/s
+speed of alarm check:                         3.89 million/s
+
+result
+-------------------------------------------------------
+a92b66a9802704ca8616c4b092378272  opmen  hex:6f706d656e
+d4efdba5e9725e77c9b9051fa8136f0a  tthel  hex:747468656c
+96f6065d8f2dd1376eff88fba65d1d83  cance  hex:63616e6365
+78c1b8edd1bc3ffc438432479289a9e1  nized  hex:6e697a6564
+0d5b558d5f6744deaaf5b016c6c77a57  tpoin  hex:74706f696e
+ddaafa5d551a582bc924d09cc8d33ee5  aseas  hex:6173656173
+a74edf83748e3c4fa5f31ec10bad79db  dsmto  hex:64736d746f
+1b31905c59f481958d2eb72158c27ac7  egunb  hex:6567756e62
+6e313b70d12de950443527a33d802b76  mlhdi  hex:6d6c686469
+de952f5454fb0ee79bca249f80e9fe8f  ofror  hex:6f66726f72
+a8218c67a5b4e652e30a59372e07df59  hed4e  hex:6865643465
+836626589007d7dd5304c8d22815fffc  di5gv  hex:6469356776
+644674d142ba2174a80889f833b32563  owso9  hex:6f77736f39
+1b4baba3ae3be69857b323cf6b7fcd80  sso55  hex:73736f3535
+81466b6bb4be5a48e2230be1338bcde6  lou0g  hex:6c6f753067
+
+
+With salting
+
+Table generation:
+chain lenth = 9000
+chain number = 3600000
+Time used to generate: around 90 mins
+
+Cracking:
+statistics
+-------------------------------------------------------
+plaintext found:                              15 of 15
+total time:                                   439.34 s
+  time of chain traverse:                     284.10 s
+  time of alarm check:                        154.41 s
+  time of wait:                               0.00 s
+  time of other operation:                    0.82 s
+time of disk read:                            0.24 s
+hash & reduce calculation of chain traverse:  479880000
+hash & reduce calculation of alarm check:     261023250
+number of alarm:                              139623
+speed of chain traverse:                      1.69 million/s
+speed of alarm check:                         1.69 million/s
+
+result
+-------------------------------------------------------
+4a2a02816924c27ea0429d40dd05cdc4  mlhdio  hex:6d6c6864696f
+c86c1ff2bf196302db10f2e25daa00b9  nizedp  hex:6e697a656470
+de493556c0841c5f16b342692243c978  aseasp  hex:617365617370
+f5df2f9ba26f018b0492ab7801b06ae9  hed4et  hex:686564346574
+9d5c531edc2d81be9d20c702546a7dc9  ofroro  hex:6f66726f726f
+73ad760f94939519d06bad423974edc9  opmenl  hex:6f706d656e6c
+01c34045eaa0e8249df673f0540db134  tthely  hex:747468656c79
+cdc80eeb0002e1c5227e982003d93dde  dsmtov  hex:64736d746f76
+d9ddb7f257f324618f7c3037a3915dbc  egunbe  hex:6567756e6265
+31c285c38d860200e9295f15620d2815  sso55d  hex:73736f353564
+f539ed6f2ec65a31faa7b16035392f63  cancej  hex:63616e63656a
+69990cd7502585dcd6055f82873b710f  lou0ge  hex:6c6f75306765
+2daf25297fda7510feac27c862d5bdcc  owso9n  hex:6f77736f396e
+1b2ae45afbb09653e318386f0dc4e1ee  di5gvk  hex:64693567766b
+1a0f9ee98178ebdffb6440d230bff151  tpoinv  hex:74706f696e76
+
+
+
+The only difference for unsalted password and salted password is they are different in length. With password length of 5
+using lower case letters and numeric characters has 36^5 = 60466176 number of combinations, while password with length
+of 6 has 36^6 = 2176782336 number of combinations. Since chain_number * chain_lenth >= number of combinations,
+chain_number and chain_length in the rainbow table must be larger if we dealing with password of length 6 rather than
+password of length 5. If we want to break as many password as we can, the time cost will be much higher if password is
+salted.
+Additionally, salted password will be very hard to crack if the attacker uses dictionary approach. The salted password
+will less likely to be in the most common password lists.
+
+
+
+
+Hash breaking competition
+
+Firstly, I found out all the password within length of 5 using brute force method.
+
+For password with length 6-7, I generated a rainbow table and managed to figure out a few hashes in several hours.
+
+In the mean time, I used a ramdom string generator to generate string of length 6-7 and compare the hash value with the
+hashes we need to solve.
+
+Then I used the following password list avilable on the Internet to lookup common passwords:
+
+DCHTPassv1.0.txt
+foundHashesOrg220215.txt
+InsideProFull.txt
+hashesorg251015.txt
+Wordlist_82_million.txt
+hk_hlm_founds.txt
+crackstation-human-only.txt
+passwords_collection.txt
+crackstation.txt
+wordlist.txt
+
+For the remaining unsolved hashes, I used a online tool to search for hashes:
+https://hashkiller.co.uk/md5-decrypter.aspx
+
+Eventually, I managed to solve 133 out of the 201 hashed. ( in result.csv )
+
+
+
