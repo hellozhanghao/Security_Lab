@@ -25,5 +25,3 @@ if __name__=="__main__":
     print('Writing to: %s'%outfile)
 
     success=extract(infile,outfile,headerfile)
-
-            
